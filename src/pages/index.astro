@@ -34,12 +34,7 @@ import logoOrigin from '../assets/logo-origin.webp';
           <div class="mb-4 md:mb-6">
             <div class="text-secondary-light dark:text-secondary-dark terminal-command">$ whoami</div>
             <div class="mt-2 text-light-light dark:text-light-dark">
-              <!-- 在移动端显示简化的标题 -->
-              <div class="block md:hidden text-center">
-                <span class="text-2xl font-bold text-cyan-500 dark:text-cyan-400">N0way</span><span class="text-2xl font-bold text-red-500 dark:text-red-400">Back</span>
-              </div>
-              <!-- 在桌面端显示ASCII艺术字 -->
-              <div class="hidden md:block ascii-art-container overflow-x-auto">
+              <div class="ascii-art-container overflow-x-auto">
                 <pre class="ascii-art ascii-art-cyan">
  _   _ _____                         
 | \ | |  _  |                      
@@ -212,6 +207,13 @@ import logoOrigin from '../assets/logo-origin.webp';
     display: flex;
     justify-content: center;
     white-space: nowrap;
+    overflow-x: auto;
+    max-width: 100%;
+    font-size: 0.4rem;
+    transform: scale(0.9);
+    transform-origin: center center;
+    margin: 0 auto;
+    width: 100%;
   }
   
   /* ASCII艺术 */
@@ -220,8 +222,8 @@ import logoOrigin from '../assets/logo-origin.webp';
     white-space: pre;
     line-height: 1.2;
     overflow-x: visible;
-    font-size: 0.7rem;
     display: inline-block;
+    font-size: 0.5rem;
   }
   
   .ascii-art-cyan {
@@ -234,7 +236,41 @@ import logoOrigin from '../assets/logo-origin.webp';
     text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
   }
   
+  /* 小屏幕样式 */
+  @media (max-width: 479px) {
+    .ascii-art-container {
+      transform: scale(0.9);
+    }
+    
+    .ascii-art {
+      font-size: 0.5rem;
+    }
+  }
+  
+  /* 平板样式 */
+  @media (min-width: 480px) and (max-width: 639px) {
+    .ascii-art-container {
+      transform: scale(0.95);
+    }
+  }
+  
+  /* 大平板样式 */
+  @media (min-width: 640px) and (max-width: 767px) {
+    .ascii-art-container {
+      transform: scale(1);
+    }
+    
+    .ascii-art {
+      font-size: 0.7rem;
+    }
+  }
+  
+  /* 桌面样式 */
   @media (min-width: 768px) {
+    .ascii-art-container {
+      transform: none;
+    }
+    
     .ascii-art {
       font-size: 0.875rem;
     }
