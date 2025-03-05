@@ -35,7 +35,7 @@ import logoOrigin from '../assets/logo-origin.webp';
             <div class="text-secondary-light dark:text-secondary-dark terminal-command">$ whoami</div>
             <div class="mt-2 text-light-light dark:text-light-dark">
               <div class="ascii-art-container overflow-x-auto">
-                <pre class="ascii-art ascii-art-cyan">
+                <pre class="ascii-art ascii-art-left">
  _   _ _____                         
 | \ | |  _  |                      
 |  \| | | | |_      ____ _ _   _   
@@ -45,7 +45,7 @@ import logoOrigin from '../assets/logo-origin.webp';
                            __/ |  
                           |___/   
                 </pre>
-                <pre class="ascii-art ascii-art-red">
+                <pre class="ascii-art ascii-art-right">
   ______            _    
   | ___ \          | |   
   | |_/ / __ _  ___| | __
@@ -214,6 +214,18 @@ import logoOrigin from '../assets/logo-origin.webp';
     transform-origin: center center;
     margin: 0 auto;
     width: 100%;
+    background: linear-gradient(90deg, 
+      #3BFFFF 0%, 
+      #3BFFFF 35%, 
+      #8CDCCD 42%,
+      #D8B99E 48%,
+      #FF7A54 55%,
+      #FF3700 65%, 
+      #FF3700 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
   }
   
   /* ASCII艺术 */
@@ -224,16 +236,11 @@ import logoOrigin from '../assets/logo-origin.webp';
     overflow-x: visible;
     display: inline-block;
     font-size: 0.5rem;
+    text-shadow: none;
   }
   
-  .ascii-art-cyan {
-    color: rgba(6, 182, 212, 0.9);
-    text-shadow: 0 0 5px rgba(6, 182, 212, 0.5);
-  }
-  
-  .ascii-art-red {
-    color: rgba(239, 68, 68, 0.9);
-    text-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+  .ascii-art-left, .ascii-art-right {
+    background: transparent;
   }
   
   /* 小屏幕样式 */
