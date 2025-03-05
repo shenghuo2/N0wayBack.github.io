@@ -82,10 +82,10 @@ import logo from '../assets/logo.svg';
 </header>
 
 <script>
-  // Mobile menu toggle
+  // 移动菜单功能
   const mobileMenuButton = document.getElementById('mobile-menu-button');
   const mobileMenu = document.getElementById('mobile-menu');
-
+  
   if (mobileMenuButton && mobileMenu) {
     mobileMenuButton.addEventListener('click', () => {
       mobileMenu.classList.toggle('hidden');
@@ -95,18 +95,8 @@ import logo from '../assets/logo.svg';
   // Theme toggle functionality
   const themeToggles = document.querySelectorAll('.theme-toggle');
   
-  // Check for dark mode preference
-  const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-  const hasThemePreference = localStorage.getItem('theme') !== null;
-  
-  // Set initial theme
-  if (hasThemePreference) {
-    if (localStorage.getItem('theme') === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  } else if (darkModeMediaQuery.matches) {
+  // 确保初始主题设置为深色
+  if (!localStorage.getItem('theme')) {
     document.documentElement.classList.add('dark');
     localStorage.setItem('theme', 'dark');
   }

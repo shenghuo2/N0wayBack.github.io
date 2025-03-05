@@ -27,7 +27,7 @@ const { title, description = "Official website of N0wayBack Team" } = Astro.prop
         if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
           return localStorage.getItem('theme');
         }
-        return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        return 'dark'; // 默认使用深色模式，不检查系统偏好
       };
       
       const theme = getThemePreference();
@@ -47,9 +47,6 @@ const { title, description = "Official website of N0wayBack Team" } = Astro.prop
     
     <script>
       document.addEventListener('DOMContentLoaded', () => {
-        // 获取系统主题偏好
-        const prefersDarkScheme = window.matchMedia('(prefers-color-scheme: dark)');
-        
         // 从 localStorage 中获取用户的主题选择
         const currentTheme = localStorage.getItem('theme');
         
@@ -59,12 +56,9 @@ const { title, description = "Official website of N0wayBack Team" } = Astro.prop
         } else if (currentTheme === 'light') {
           document.documentElement.classList.remove('dark');
         } else {
-          // 否则根据系统首选项设置
-          if (prefersDarkScheme.matches) {
-            document.documentElement.classList.add('dark');
-          } else {
-            document.documentElement.classList.remove('dark');
-          }
+          // 如果没有设置，默认使用深色模式
+          document.documentElement.classList.add('dark');
+          localStorage.setItem('theme', 'dark');
         }
 
         // 添加终端启动效果
