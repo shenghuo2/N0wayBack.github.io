@@ -7,79 +7,78 @@ export interface Honor {
 }
 
 export const honors: Honor[] = [
+  // TPCTF 比赛数据
   {
-    id: "honor1",
-    name: "N0wayBack Team Established",
-    date: "2022-11-11",
-    rank: "Milestone",
-    isMilestone: true
+    id: "tpctf_2025",
+    name: "TPCTF 2025",
+    date: "2025-03-08",
+    rank: "6th Place",
+  },
+  // NKCTF 比赛数据
+  {
+    id: "nkctf_2024",
+    name: "NKCTF 2024",
+    date: "2024-03-23",
+    rank: "Organizer",
   },
   {
-    id: "honor2",
-    name: "CyberSec Cup 2022 Online Qualifier",
-    date: "2022-11-27",
+    id: "nkctf_2023",
+    name: "NKCTF 2023",
+    date: "2023-03-24",
+    rank: "Organizer",
+    isMilestone: true
+  },
+  // DASCTF 比赛数据
+  {
+    id: "dasctf_2024_last",
+    name: "DASCTF 2024最后一战",
+    date: "2024-12-21",
+    rank: "4th Place",
+  },
+  {
+    id: "dasctf_2024_oct",
+    name: "DASCTF 2024金秋十月",
+    date: "2024-10-19",
     rank: "3rd Place",
   },
   {
-    id: "honor3",
-    name: "First CTF Competition",
-    date: "2022-11-27",
-    rank: "Milestone",
-    isMilestone: true
-  },
-  {
-    id: "honor4",
-    name: "National CTF 2022",
-    date: "2022-12-04",
+    id: "dasctf_2024_summer",
+    name: "DASCTF 2024暑期挑战赛",
+    date: "2024-07-20",
     rank: "3rd Place",
   },
   {
-    id: "honor5",
-    name: "Regional Security Challenge",
-    date: "2022-12-09",
-    rank: "1st Place",
+    id: "dasctf_hdctf_2024",
+    name: "DASCTF X HDCTF 2024",
+    date: "2024-06-02",
+    rank: "4th Place",
   },
   {
-    id: "honor6",
-    name: "CyberSec Cup 2022 Finals",
-    date: "2022-12-14",
-    rank: "Bronze Award",
+    id: "dasctf_gfctf_2024",
+    name: "DASCTF X GFCTF 2024",
+    date: "2024-04-20",
+    rank: "3rd Place",
   },
+  // 强网杯比赛数据
   {
-    id: "honor7",
-    name: "International Hacking Competition",
-    date: "2023-03-15",
-    rank: "Top 10",
-  },
-  {
-    id: "honor8",
-    name: "University CTF Championship",
-    date: "2023-05-20",
-    rank: "2nd Place",
-  },
-  {
-    id: "honor9",
-    name: "100th CTF Challenge Completed",
-    date: "2023-08-01",
-    rank: "Milestone",
+    id: "qiangwangbei_s8_qual",
+    name: "强网杯 S8 Qual",
+    date: "2024-11-02",
+    rank: "8th Place",
     isMilestone: true
   },
   {
-    id: "honor10",
-    name: "Global Security Conference CTF",
-    date: "2023-10-12",
-    rank: "Silver Award",
+    id: "qiangwangbei_s8_final",
+    name: "强网杯 S8 Final",
+    date: "2024-12-05",
+    rank: "9th Place",
+    isMilestone: true
   },
+  // D3CTF 比赛数据
   {
-    id: "honor11",
-    name: "National Cyber Defense Exercise",
-    date: "2024-01-25",
-    rank: "Top Team",
-  },
-  {
-    id: "honor12",
-    name: "Annual Achievements Recognition",
-    date: "2024-02-28",
-    rank: "Most Improved Team",
+    id: "d3ctf_2024",
+    name: "D^3CTF 2024",
+    date: "2024-04-07",
+    rank: "4th Place",
   }
 ];
