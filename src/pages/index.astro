@@ -215,17 +215,36 @@ import logoOrigin from '../assets/logo-origin.webp';
     margin: 0 auto;
     width: 100%;
     background: linear-gradient(90deg, 
-      #3BFFFF 0%, 
-      #3BFFFF 35%, 
-      #8CDCCD 42%,
-      #D8B99E 48%,
-      #FF7A54 55%,
-      #FF3700 65%, 
-      #FF3700 100%);
+      #0066FF 0%, 
+      #0099FF 35%, 
+      #00CCFF 42%,
+      #FF6600 48%,
+      #FF3300 55%,
+      #CC0000 65%, 
+      #990000 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
     color: transparent;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* 浅色模式下使用更深的颜色 */
+  :root:not(.dark) .ascii-art-container {
+    background: linear-gradient(90deg, 
+      #0033CC 0%, 
+      #0066CC 35%, 
+      #0099CC 42%,
+      #CC3300 48%,
+      #990000 55%,
+      #660000 65%, 
+      #330000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+    font-weight: bold;
   }
   
   /* ASCII艺术 */
