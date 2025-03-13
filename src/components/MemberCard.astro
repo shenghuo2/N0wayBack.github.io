@@ -52,42 +52,128 @@ if (category === 'admin') {
   categoryClass = 'border-secondary-light/20 dark:border-secondary-dark/20';
 }
 
-// 根据技能名称生成唯一的颜色 - 使用更鲜明的颜色方案
+// 创建一个技能到颜色的映射缓存
+const skillColorCache = new Map();
+
+// 预定义一组丰富多样的颜色
+const predefinedColors = [
+  { h: 0, s: 85, l: 65 },      // 红色
+  { h: 15, s: 85, l: 60 },     // 橙红色
+  { h: 30, s: 85, l: 60 },     // 橙色
+  { h: 45, s: 85, l: 60 },     // 橙黄色
+  { h: 60, s: 85, l: 55 },     // 黄色
+  { h: 75, s: 70, l: 55 },     // 黄绿色
+  { h: 90, s: 65, l: 50 },     // 草绿色
+  { h: 120, s: 60, l: 45 },    // 绿色
+  { h: 150, s: 65, l: 50 },    // 青绿色
+  { h: 180, s: 70, l: 50 },    // 青色
+  { h: 195, s: 75, l: 55 },    // 浅蓝色
+  { h: 210, s: 80, l: 60 },    // 蓝色
+  { h: 225, s: 80, l: 60 },    // 深蓝色
+  { h: 240, s: 75, l: 65 },    // 靛蓝色
+  { h: 260, s: 75, l: 65 },    // 蓝紫色
+  { h: 270, s: 75, l: 65 },    // 紫色
+  { h: 285, s: 70, l: 60 },    // 紫红色
+  { h: 300, s: 70, l: 60 },    // 粉色
+  { h: 315, s: 75, l: 60 },    // 洋红色
+  { h: 330, s: 80, l: 55 },    // 深粉色
+  { h: 345, s: 80, l: 60 },    // 玫瑰红色
+  // 额外的柔和色调
+  { h: 20, s: 60, l: 70 },     // 浅橙色
+  { h: 40, s: 70, l: 70 },     // 浅黄色
+  { h: 80, s: 50, l: 60 },     // 浅绿色
+  { h: 140, s: 50, l: 60 },    // 薄荷绿
+  { h: 170, s: 60, l: 60 },    // 浅青色
+  { h: 190, s: 60, l: 70 },    // 天蓝色
+  { h: 220, s: 60, l: 70 },    // 淡蓝色
+  { h: 250, s: 60, l: 70 },    // 淡紫色
+  { h: 280, s: 50, l: 70 },    // 淡粉紫色
+  { h: 320, s: 50, l: 70 },    // 浅粉色
+];
+
+// 根据技能名称生成唯一的颜色
 function generateColorFromSkill(skill: string) {
-  // 简单的字符串哈希函数
+  // 检查缓存中是否已有该技能的颜色
+  if (skillColorCache.has(skill)) {
+    return skillColorCache.get(skill);
+  }
+  
+  // 为每个技能分配一个唯一的颜色索引
+  // 使用技能名称的哈希值来确保相同技能总是获得相同颜色
   let hash = 0;
   for (let i = 0; i < skill.length; i++) {
     hash = skill.charCodeAt(i) + ((hash << 5) - hash);
   }
   
-  // 预定义一些鲜明的颜色组合
-  const colorSets = [
-    { h: 0, s: 85, l: 65 },     // 红色
-    { h: 30, s: 85, l: 60 },    // 橙色
-    { h: 60, s: 85, l: 55 },    // 黄色
-    { h: 120, s: 60, l: 45 },   // 绿色
-    { h: 180, s: 70, l: 50 },   // 青色
-    { h: 210, s: 80, l: 60 },   // 蓝色
-    { h: 270, s: 75, l: 65 },   // 紫色
-    { h: 300, s: 70, l: 60 },   // 粉色
-    { h: 330, s: 80, l: 55 }    // 洋红色
-  ];
+  // 确保哈希值为正数
+  hash = Math.abs(hash);
   
-  // 选择一个颜色组合
-  const colorIndex = Math.abs(hash) % colorSets.length;
-  const baseColor = colorSets[colorIndex];
+  // 选择一个预定义的颜色
+  const colorIndex = hash % predefinedColors.length;
+  const baseColor = predefinedColors[colorIndex];
   
-  // 添加一些随机变化，但保持在同一色系
-  const h = baseColor.h + (Math.abs(hash) % 20) - 10;  // 色相微调
-  const s = baseColor.s + (Math.abs(hash) % 10) - 5;   // 饱和度微调
-  const l = baseColor.l + (Math.abs(hash) % 10) - 5;   // 亮度微调
+  // 添加一些微小的随机变化，但保持在同一色系
+  // 这样可以确保相似的技能名称不会得到完全相同的颜色
+  const variationRange = 5; // 较小的变化范围
+  const h = baseColor.h + (hash % variationRange) - Math.floor(variationRange / 2);
+  const s = Math.min(100, Math.max(30, baseColor.s + (hash % variationRange) - Math.floor(variationRange / 2)));
+  const l = Math.min(80, Math.max(30, baseColor.l + (hash % variationRange) - Math.floor(variationRange / 2)));
   
-  return { 
+  // 创建颜色对象
+  const colorObj = { 
     bgLight: `hsla(${h}, ${s}%, ${l}%, 0.2)`, 
     bgDark: `hsla(${h}, ${s}%, ${Math.max(l-15, 30)}%, 0.25)`,
     borderLight: `hsla(${h}, ${s+10}%, ${l-10}%, 0.3)`,
     borderDark: `hsla(${h}, ${s+10}%, ${Math.max(l-5, 35)}%, 0.35)`
   };
+  
+  // 将颜色保存到缓存中
+  skillColorCache.set(skill, colorObj);
+  
+  return colorObj;
+}
+
+// 确保每个技能都有唯一的颜色
+// 预先处理所有技能，防止哈希冲突导致颜色重复
+if (skills && skills.length > 0) {
+  const usedColorIndices = new Set();
+  
+  skills.forEach(skill => {
+    let hash = 0;
+    for (let i = 0; i < skill.length; i++) {
+      hash = skill.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    hash = Math.abs(hash);
+    
+    let colorIndex = hash % predefinedColors.length;
+    let attempts = 0;
+    const maxAttempts = predefinedColors.length;
+    
+    // 如果颜色已被使用，尝试下一个颜色
+    while (usedColorIndices.has(colorIndex) && attempts < maxAttempts) {
+      colorIndex = (colorIndex + 1) % predefinedColors.length;
+      attempts++;
+    }
+    
+    // 标记此颜色已被使用
+    usedColorIndices.add(colorIndex);
+    
+    // 生成并缓存颜色
+    const baseColor = predefinedColors[colorIndex];
+    const variationRange = 5;
+    const h = baseColor.h + (hash % variationRange) - Math.floor(variationRange / 2);
+    const s = Math.min(100, Math.max(30, baseColor.s + (hash % variationRange) - Math.floor(variationRange / 2)));
+    const l = Math.min(80, Math.max(30, baseColor.l + (hash % variationRange) - Math.floor(variationRange / 2)));
+    
+    const colorObj = { 
+      bgLight: `hsla(${h}, ${s}%, ${l}%, 0.2)`, 
+      bgDark: `hsla(${h}, ${s}%, ${Math.max(l-15, 30)}%, 0.25)`,
+      borderLight: `hsla(${h}, ${s+10}%, ${l-10}%, 0.3)`,
+      borderDark: `hsla(${h}, ${s+10}%, ${Math.max(l-5, 35)}%, 0.35)`
+    };
+    
+    skillColorCache.set(skill, colorObj);
+  });
 }
 ---
 
