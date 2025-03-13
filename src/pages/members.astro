@@ -4,16 +4,28 @@ import { members } from '../data/members';
 import MemberCard from '../components/MemberCard.astro';
 
 // 根据category属性将成员分为三类：管理组、活跃成员和先驱成员
-const teamLeaders = members.filter(member => member.category === 'leader');
+const teamLeaders = members.filter(member => member.category === 'admin');
 const activeMembers = members.filter(member => member.category === 'active' || !member.category); // 默认为active
 const pioneerMembers = members.filter(member => member.category === 'pioneers');
+
+// 如果没有先驱成员，添加一个占位符
+if (pioneerMembers.length === 0) {
+  pioneerMembers.push({
+    id: "construction",
+    name: "Under Construction",
+    avatar: "https://cdn-icons-png.flaticon.com/512/6295/6295417.png",
+    bio: "Coming soon...",
+    skills: ["Stay tuned"],
+    category: "pioneers"
+  });
+}
 ---
 
 <MainLayout title="Team Members">
   <div class="cyberpunk-grid"></div>
   
   <section class="py-8 md:py-16">
-    <div class="w-full max-w-4xl mx-auto px-4">
+    <div class="w-full max-w-5xl mx-auto px-4">
       <div class="terminal-container">
         <!-- 移动端简化的终端标题 -->
         <div class="terminal-header font-mono text-xs md:hidden">
@@ -47,7 +59,7 @@ const pioneerMembers = members.filter(member => member.category === 'pioneers');
             </div>
             
             {teamLeaders.length > 0 && (
-              <div class="grid md:grid-cols-2 gap-4 md:gap-6 mt-3 md:mt-4 cards-grid">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 mt-3 md:mt-4 cards-grid">
                 {teamLeaders.map((member) => (
                   <div class="card-hover">
                     <MemberCard 
@@ -80,7 +92,7 @@ const pioneerMembers = members.filter(member => member.category === 'pioneers');
             </div>
             
             {activeMembers.length > 0 && (
-              <div class="grid md:grid-cols-2 gap-4 md:gap-6 mt-3 md:mt-4 cards-grid">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 mt-3 md:mt-4 cards-grid">
                 {activeMembers.map((member) => (
                   <div class="card-hover">
                     <MemberCard 
@@ -113,7 +125,7 @@ const pioneerMembers = members.filter(member => member.category === 'pioneers');
             </div>
             
             {pioneerMembers.length > 0 && (
-              <div class="grid md:grid-cols-2 gap-4 md:gap-6 mt-3 md:mt-4 cards-grid">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-10 mt-3 md:mt-4 cards-grid">
                 {pioneerMembers.map((member) => (
                   <div class="card-hover">
                     <MemberCard 

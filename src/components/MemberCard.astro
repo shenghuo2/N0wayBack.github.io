@@ -7,26 +7,44 @@ interface Props {
   bio?: string;
   skills?: string[];
   isLeader?: boolean;
-  category?: 'leader' | 'active' | 'pioneers'; 
+  category?: 'admin' | 'active' | 'pioneers';
+  rank?: string;
 }
 
 const { name, avatar, link, github, bio, skills = [], isLeader = false, category = 'active' } = Astro.props;
 
-// 从GitHub链接中提取用户名（如果没有直接提供github属性）
-let githubUsername = github || '';
-if (!githubUsername && link && link.includes('github.com/')) {
+// 处理带有"|"分隔符的名称
+const formattedName = name.includes('|') 
+  ? name.split('|').map(part => part.trim()).join(' / ') 
+  : name;
+
+// 处理GitHub链接和用户名
+let githubUsername = '';
+let githubUrl = '';
+
+if (github) {
+  // 如果github属性包含完整URL
+  if (github.includes('github.com/')) {
+    // 提取用户名
+    githubUsername = github.split('github.com/')[1].split('/')[0];
+    githubUrl = github; // 使用原始URL
+  } else {
+    // 假设它只是用户名
+    githubUsername = github;
+    githubUrl = `https://github.com/${github}`;
+  }
+} else if (link && link.includes('github.com/')) {
+  // 从link中提取
   githubUsername = link.split('github.com/')[1].split('/')[0];
+  githubUrl = link;
 }
 
 // 判断是否有链接
 const hasLinks = githubUsername || (link && !link.includes('github.com/'));
 
-// 如果有GitHub用户名，生成GitHub链接
-const githubLink = github ? `https://github.com/${github}` : null;
-
 // 根据category设置不同的样式
 let categoryClass = '';
-if (category === 'leader') {
+if (category === 'admin') {
   categoryClass = 'border-secondary-light/30 dark:border-secondary-dark/30';
 } else if (category === 'pioneers') {
   categoryClass = 'border-yellow-500/30 dark:border-yellow-400/30';
@@ -34,7 +52,7 @@ if (category === 'leader') {
   categoryClass = 'border-secondary-light/20 dark:border-secondary-dark/20';
 }
 
-// 根据技能名称生成唯一的颜色 - 使用更柔和的颜色方案
+// 根据技能名称生成唯一的颜色 - 使用更鲜明的颜色方案
 function generateColorFromSkill(skill: string) {
   // 简单的字符串哈希函数
   let hash = 0;
@@ -42,31 +60,48 @@ function generateColorFromSkill(skill: string) {
     hash = skill.charCodeAt(i) + ((hash << 5) - hash);
   }
   
-  // 将哈希值转换为HSL颜色 - 使用更柔和的颜色
-  const h = Math.abs(hash) % 360; // 色相 0-359
-  const s = 20 + (Math.abs(hash) % 15); // 饱和度降低到 20-34%
-  const l = 60 + (Math.abs(hash) % 15); // 亮度提高到 60-74%
+  // 预定义一些鲜明的颜色组合
+  const colorSets = [
+    { h: 0, s: 85, l: 65 },     // 红色
+    { h: 30, s: 85, l: 60 },    // 橙色
+    { h: 60, s: 85, l: 55 },    // 黄色
+    { h: 120, s: 60, l: 45 },   // 绿色
+    { h: 180, s: 70, l: 50 },   // 青色
+    { h: 210, s: 80, l: 60 },   // 蓝色
+    { h: 270, s: 75, l: 65 },   // 紫色
+    { h: 300, s: 70, l: 60 },   // 粉色
+    { h: 330, s: 80, l: 55 }    // 洋红色
+  ];
+  
+  // 选择一个颜色组合
+  const colorIndex = Math.abs(hash) % colorSets.length;
+  const baseColor = colorSets[colorIndex];
+  
+  // 添加一些随机变化，但保持在同一色系
+  const h = baseColor.h + (Math.abs(hash) % 20) - 10;  // 色相微调
+  const s = baseColor.s + (Math.abs(hash) % 10) - 5;   // 饱和度微调
+  const l = baseColor.l + (Math.abs(hash) % 10) - 5;   // 亮度微调
   
   return { 
     bgLight: `hsla(${h}, ${s}%, ${l}%, 0.2)`, 
-    bgDark: `hsla(${h}, ${s+5}%, ${l-10}%, 0.25)`,
-    borderLight: `hsla(${h}, ${s+10}%, ${l-15}%, 0.3)`,
-    borderDark: `hsla(${h}, ${s+15}%, ${l-5}%, 0.35)`
+    bgDark: `hsla(${h}, ${s}%, ${Math.max(l-15, 30)}%, 0.25)`,
+    borderLight: `hsla(${h}, ${s+10}%, ${l-10}%, 0.3)`,
+    borderDark: `hsla(${h}, ${s+10}%, ${Math.max(l-5, 35)}%, 0.35)`
   };
 }
 ---
 
-<div class={`border ${categoryClass} hover:border-secondary-light dark:hover:border-secondary-dark transition-all duration-300 p-4 flex flex-col h-full card-container`}>
+<div class={`border ${categoryClass} hover:border-secondary-light dark:hover:border-secondary-dark transition-all duration-300 p-4 flex flex-col h-full card-container mx-auto max-w-md`}>
   <div class="flex items-center gap-4 mb-4">
     <div class="w-16 h-16 rounded-sm overflow-hidden border border-secondary-light/40 dark:border-secondary-dark/40">
-      <img src={avatar} alt={`${name}'s avatar`} class="w-full h-full object-cover transition-all duration-300" />
+      <img src={avatar} alt={`${formattedName}'s avatar`} class="w-full h-full object-cover transition-all duration-300" />
     </div>
     
     <div>
-      <h3 class="font-mono text-light-light dark:text-light-dark font-bold">{name}</h3>
+      <h3 class="font-mono text-light-light dark:text-light-dark font-bold">{formattedName}</h3>
       <div class="flex flex-col gap-1 mt-1">
         {githubUsername && (
-          <a href={`https://github.com/${githubUsername}`} target="_blank" rel="noopener noreferrer" class="text-xs text-secondary-light dark:text-secondary-dark hover:underline font-mono">
+          <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="text-xs text-secondary-light dark:text-secondary-dark hover:underline font-mono">
             <span class="mr-1">~</span>github: @{githubUsername}
           </a>
         )}
@@ -87,7 +122,7 @@ function generateColorFromSkill(skill: string) {
   ) : (
     <div class={`${hasLinks ? 'mb-4' : 'mb-8'}`}>
       <p class="text-light-light/50 dark:text-light-dark/50 text-xs font-mono">
-        <span class="text-secondary-light dark:text-secondary-dark">$</span> cat /team/{name}/bio
+        <span class="text-secondary-light dark:text-secondary-dark">$</span> cat /team/{name.split('|')[0].trim()}/bio
       </p>
       <p class="text-light-light/50 dark:text-light-dark/50 text-xs font-mono italic mt-1">bio: No such file or directory</p>
     </div>
@@ -134,6 +169,7 @@ function generateColorFromSkill(skill: string) {
   /* 卡片悬停效果 - 添加$指向效果 */
   .card-container {
     position: relative;
+    width: 100%;
   }
   
   .card-container::before {
